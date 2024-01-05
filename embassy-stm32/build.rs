@@ -1008,6 +1008,8 @@ fn main() {
         (("quadspi", "QUADSPI"), quote!(crate::qspi::QuadDma)),
         (("dac", "CH1"), quote!(crate::dac::DacDma1)),
         (("dac", "CH2"), quote!(crate::dac::DacDma2)),
+        (("dac", "CHANNEL1"), quote!(crate::dac::DacDma1)),
+        (("dac", "CHANNEL2"), quote!(crate::dac::DacDma2)),
         (("timer", "UP"), quote!(crate::timer::UpDma)),
     ]
     .into();
