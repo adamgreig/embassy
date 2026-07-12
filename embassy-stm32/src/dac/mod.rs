@@ -1082,7 +1082,10 @@ trait SealedWord: Sized {
 
     fn dma_buf_mut(buf: &mut [Self]) -> &mut [Self::Word];
     fn dma_buf(buf: &[Self]) -> &[Self::Word];
+    #[cfg(any(gpdma, lpdma))]
     fn dma_ptr(regs: Regs, idx: usize) -> *mut u32;
+    #[cfg(not(any(gpdma, lpdma)))]
+    fn dma_ptr(regs: Regs, idx: usize) -> *mut Self::Word;
     fn set_value(regs: Regs, idx: usize, value: Self);
     fn set_values(regs: Regs, values: (Self, Self));
 }
@@ -1103,8 +1106,14 @@ impl SealedWord for u8 {
         buf
     }
 
+    #[cfg(any(gpdma, lpdma))]
     fn dma_ptr(regs: Regs, idx: usize) -> *mut u32 {
         regs.dhr8r(idx).as_ptr() as *mut u32
+    }
+
+    #[cfg(not(any(gpdma, lpdma)))]
+    fn dma_ptr(regs: Regs, idx: usize) -> *mut Self::Word {
+        regs.dhr8r(idx).as_ptr() as *mut Self::Word
     }
 
     fn set_value(regs: Regs, idx: usize, value: Self) {
@@ -1130,8 +1139,14 @@ impl SealedWord for u12r {
         buf.cast_mut()
     }
 
+    #[cfg(any(gpdma, lpdma))]
     fn dma_ptr(regs: Regs, idx: usize) -> *mut u32 {
         regs.dhr12r(idx).as_ptr() as *mut u32
+    }
+
+    #[cfg(not(any(gpdma, lpdma)))]
+    fn dma_ptr(regs: Regs, idx: usize) -> *mut Self::Word {
+        regs.dhr12r(idx).as_ptr() as *mut Self::Word
     }
 
     fn set_value(regs: Regs, idx: usize, value: Self) {
@@ -1157,8 +1172,14 @@ impl SealedWord for u12l {
         buf.cast_mut()
     }
 
+    #[cfg(any(gpdma, lpdma))]
     fn dma_ptr(regs: Regs, idx: usize) -> *mut u32 {
         regs.dhr12l(idx).as_ptr() as *mut u32
+    }
+
+    #[cfg(not(any(gpdma, lpdma)))]
+    fn dma_ptr(regs: Regs, idx: usize) -> *mut Self::Word {
+        regs.dhr12l(idx).as_ptr() as *mut Self::Word
     }
 
     fn set_value(regs: Regs, idx: usize, value: Self) {
