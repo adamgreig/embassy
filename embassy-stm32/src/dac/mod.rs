@@ -1044,6 +1044,7 @@ macro_rules! impl_word_type {
         #[repr(transparent)]
         #[doc = concat!(stringify!($a), " integer type.")]
         #[derive(Clone, Copy, Debug)]
+        #[cfg_attr(feature = "defmt", derive(defmt::Format))]
         pub struct $a(pub $b);
 
         impl_word_type!($a, $b, INTO_SLICE);
